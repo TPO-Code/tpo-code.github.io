@@ -1,0 +1,6 @@
+title: John's Project Blog
+description: A blog about my projects and thoughts
+baseurl: ""
+url: "https://tpo-code.github.io"
+plugins:
+  - jekyll-feed

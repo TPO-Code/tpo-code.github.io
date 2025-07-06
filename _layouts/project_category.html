@@ -1,0 +1,81 @@
+---
+layout: default
+---
+
+{{ content }}
+
+{% comment %} Number of recent posts to show by default {% endcomment %}
+{% assign recent_limit = 3 %}
+
+{% comment %}
+  1. Get all posts for the category specified in the page's front matter.
+     This list is already sorted by date, newest to oldest.
+{% endcomment %}
+{% assign category_posts = site.categories[page.category_key] %}
+
+{% if category_posts and category_posts.size > 0 %}
+
+  {% comment %}
+    2. Filter those to only include posts that have a 'project' defined.
+       The sort order is preserved.
+  {% endcomment %}
+  {% assign posts_with_project = category_posts | where_exp: "post", "post.project" %}
+
+  {% comment %}
+    3. Group the filtered posts by the 'project' front matter variable.
+       Because the input list is sorted, the groups will be ordered by the
+       date of the most recent post in each project.
+  {% endcomment %}
+  {% assign grouped_by_project_name = posts_with_project | group_by: "project" %}
+
+  {% comment %}
+    4. Loop directly through the 'grouped_by_project_name' variable.
+       No extra sorting is needed.
+  {% endcomment %}
+  {% for group in grouped_by_project_name %}
+    <div class="project-group">
+      <h2>{{ group.name }}</h2>
+      <ul class="post-list">
+        {% for post in group.items %}
+          {% if forloop.index > recent_limit %}
+            <li class="toggleable-post" style="display: none;">
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+              - <span class="post-date">{{ post.date | date: "%d-%m-%Y" }}</span>
+            </li>
+          {% else %}
+            <li>
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+              - <span class="post-date">{{ post.date | date: "%d-%m-%Y" }}</span>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% if group.items.size > recent_limit %}
+        <button class="show-all-btn" type="button">Show all ({{ group.items.size }})</button>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+{% else %}
+  <p>No projects with posts found in this category yet.</p>
+{% endif %}
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const showAllButtons = document.querySelectorAll('.show-all-btn');
+
+  showAllButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const projectGroup = this.closest('.project-group');
+      const hiddenPosts = projectGroup.querySelectorAll('li.toggleable-post');
+
+      hiddenPosts.forEach(post => {
+        post.style.display = 'list-item';
+      });
+
+      this.style.display = 'none';
+    });
+  });
+});
+</script>
