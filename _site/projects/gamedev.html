@@ -1,0 +1,55 @@
+      
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Game Development Projects</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a> |
+    <a href="/projects/">Projects</a> |
+    <a href="/about.html">About</a>
+  </nav>
+  <hr>
+  <h1 id="game-development-projects">Game Development Projects</h1>
+
+<p>Here is a list of all projects related to game development. The projects with the most recent updates are listed first.</p>
+
+<p><em>(You’ll need to add a post with <code class="language-plaintext highlighter-rouge">categories: [gamedev]</code> and a <code class="language-plaintext highlighter-rouge">project</code> name for anything to appear here.)</em></p>
+
+
+
+
+
+
+
+
+
+  <p>No projects with posts found in this category yet.</p>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const showAllButtons = document.querySelectorAll('.show-all-btn');
+
+  showAllButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const projectGroup = this.closest('.project-group');
+      const hiddenPosts = projectGroup.querySelectorAll('li.toggleable-post');
+
+      hiddenPosts.forEach(post => {
+        post.style.display = 'list-item';
+      });
+
+      this.style.display = 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>
+
+    
